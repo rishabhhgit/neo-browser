@@ -46,7 +46,7 @@ Neo is a desktop web browser whose engine is **neither Chromium, WebKit, nor Gec
 - [License](#-license)
 - [Acknowledgments](#-acknowledgments)
 
-**Status legend used below:** 🧪 experimental · 🚧 not implemented (planned or out of scope for now). Anything with no marker is implemented and was verified during development of this release.
+**Status legend used below:**  🚧 --> not implemented (planned or out of scope for now). Anything with no marker is implemented and was verified during development of this release.
 
 ---
 
@@ -96,8 +96,8 @@ Neo is a desktop web browser whose engine is **neither Chromium, WebKit, nor Gec
 | DASH adaptive streaming | `.mpd` manifests play through `<video>` (verified with the Akamai `bbb_30fps` test stream). |
 | Multiple simultaneous streams | Verified: three concurrent `<video>` elements (HLS + DASH + MP4) all reach `readyState = 4` and advance playback time. |
 | GPU compositing | WebRender compositing over OpenGL/ANGLE (observed running on Direct3D 11 via ANGLE). |
-| WebGL / WebGPU 🧪 / WebXR 🧪 | Enabled by default in the feature set; maturity varies by site — these are the engine's experimental web features. |
-| Gamepad API 🧪 | Gamepad feature enabled by default (`gilrs` backend). |
+| WebGL / WebGPU (Experimental) / WebXR | Enabled by default in the feature set; maturity varies by site — these are the engine's experimental web features. |
+| Gamepad API (Experimental) | Gamepad feature enabled by default (`gilrs` backend). |
 | Rendering debug overlays | `F9` WebRender frame capture, `F10` render-target debug, `F11` texture-cache debug, `F12` profiler overlay. |
 
 ### Developer tooling and automation
@@ -105,9 +105,9 @@ Neo is a desktop web browser whose engine is **neither Chromium, WebKit, nor Gec
 | Feature | What it does |
 | --- | --- |
 | W3C WebDriver | `--webdriver <port>` starts a WebDriver server (session creation, navigation, JS execution, window handles, screenshots). Any W3C client (Selenium, `chromedriver`-style tools, plain HTTP) can drive Neo. Used extensively during development of this fork. |
-| Remote DevTools 🧪 | `--devtools <address:port>` (e.g. `127.0.0.1:7000`) starts Servo's remote devtools server. Feature is compiled in by default; not smoke-tested in the current build. |
+| Remote DevTools | `--devtools <address:port>` (e.g. `127.0.0.1:7000`) starts Servo's remote devtools server. Feature is compiled in by default; not smoke-tested in the current build. |
 | Headless mode 🚧 | `-z` / `--headless` flag exists in the CLI (inherited from Servo). |
-| Logging 🧪 | Standard `env_logger` filtering, e.g. `RUST_LOG=info` (verified) or module filters such as `RUST_LOG=net=debug`. |
+| Logging | Standard `env_logger` filtering, e.g. `RUST_LOG=info` (verified) or module filters such as `RUST_LOG=net=debug`. |
 
 ### Interface and platform
 
@@ -117,7 +117,7 @@ Neo is a desktop web browser whose engine is **neither Chromium, WebKit, nor Gec
 | Site dialogs | Alert/confirm/prompt boxes, file pickers, HTTP authentication dialogs, permission requests, select-element popups, color pickers, and right-click context menus are all implemented in the shell UI. |
 | `neo:` internal pages | `neo:newtab`, `neo:preferences`, `neo:config`, `neo:experimental-preferences`, `neo:default-user-agent` — served by a built-in protocol handler. |
 | Branding | `neo.exe`, Neo window titles, Neo application identity on Windows, Neo icon set (`resources/neo.ico`, `resources/neo_logo.png`). |
-| Accessibility 🧪 | AccessKit integration is compiled into the shell (screen-reader tree exposure comes from the engine's accessibility support). |
+| Accessibility | AccessKit integration is compiled into the shell (screen-reader tree exposure comes from the engine's accessibility support). |
 | WebDriver-compatible control of dialogs | Embedder controls are virtualized under WebDriver so automation can accept prompts. |
 
 ---
@@ -359,27 +359,6 @@ neo-browser/
 
 ## 🏗 Architecture and implementation
 
-```
-┌──────────────────────────── Neo (ports/servoshell) ────────────────────────────┐
-│  winit event loop ── egui chrome (toolbar, tabs, panels, dialogs)              │
-│        │                     │                                                │
-│        ▼                     ▼                                                │
-│  RunningAppState ──── ServoShellWindow ──── WebView collection (tabs)          │
-│        │                                                                        │
-│        ▼  Servo embedder API                                                    │
-│  ┌──────────────────────────── Servo engine ────────────────────────────┐      │
-│  │ constellation ──── script (DOM/JS, SpiderMonkey) ──── layout/style   │      │
-│  │      │                        │                          │          │      │
-│  │      └──── net (HTTP, cookies, HSTS, cache)              │          │      │
-│  │                                   │                       ▼          │      │
-│  │                          media (GStreamer: MP4/HLS/DASH)  paint      │      │
-│  │                                   │                       │          │      │
-│  │                                   └── video frames ──► webrender      │      │
-│  └───────────────────────────────────────────────────┬──────────────────┘      │
-│                                                      ▼                          │
-│                                        surfman / ANGLE (GPU present)           │
-└─────────────────────────────────────────────────────────────────────────────────┘
-```
 
 Key ideas:
 
