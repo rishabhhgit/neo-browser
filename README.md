@@ -160,7 +160,7 @@ Neo is under active development. This is the **complete, honest list** of everyt
 
 - **Windows is the only verified platform.** Built and tested on **Windows 11 x86_64 (MSVC)** only; Servo's macOS/Linux/Android code paths are retained but untested in this fork.
 - **Linux config directory is still upstream's** `~/.config/servo/default/` — not yet renamed to Neo.
-- **The WPT suite ships but has not been run or re-baselined** for this fork, and there is **no CI yet** — claims here rest on manual verification and the shell's unit tests only.
+- **No upstream WPT suite is included.** The Web Platform Tests (~700 MB) are deliberately not shipped in this repository, and there is **no CI yet** — claims here rest on manual verification and the shell's unit tests only.
 - **Remote DevTools is compiled in but not smoke-tested** in the current build.
 - **Site compatibility is not systematically tested.** Verified against Google (homepage/search/new tab), Apple and Akamai HLS/DASH test streams, and general pages; no broad site-by-site status pass has been done.
 - **Builds are unsigned** — occasional Windows Defender/AV heuristics may flag fresh builds; build from source as shown above.
@@ -212,7 +212,7 @@ The project logo is embedded at the top of this README: [`resources/neo_logo.png
 | Persistence | `serde` / `serde_json` — `prefs.json`, `history.json`, `bookmarks.json` |
 | Bindings | `bindgen` (requires `LIBCLANG_PATH` pointing at LLVM libclang) |
 | Build system | **Cargo** (primary, verified) + bundled upstream **mach** Python tooling (optional) |
-| Test suites | Rust unit tests (`ports/servoshell/test.rs`, `prefs` tests) + upstream **WPT** suite under `tests/` |
+| Test suites | Rust unit tests (`ports/servoshell/test.rs`, `prefs` tests) |
 
 ---
 
@@ -347,8 +347,6 @@ neo-browser/
 │   ├── neo_logo.png              #   logo used in-app and in this README
 │   └── resource_protocol/        #   newtab.html, preferences.html, css (served via resource:)
 │
-├── tests/                        # upstream Servo test infrastructure
-│   └── wpt/                      #   Web Platform Tests suite + reftests (large)
 ├── python/                       # mach / servo-tidy tooling
 ├── docs/                         # additional documentation (incl. upstream Servo docs)
 ├── support/, ffi/, third_party/  # support crates, FFI shims, vendored helpers
@@ -452,15 +450,7 @@ cargo test --release -p servoshell
 
 > Use `--release` to reuse the already-built dependency graph; a debug-profile test build compiles the entire engine a second time.
 
-### Web platform tests (upstream suite)
-
-Servo's WPT infrastructure lives in `tests/wpt/` and is driven by the upstream tooling:
-
-```powershell
-./mach test-wpt tests/wpt/mozilla/tests/mozilla.rs   # example subset
-```
-
-This requires the Python `mach` environment to be set up. WPT has **not** been run or re-baselined for this fork, and no CI claims are made about it.
+> The upstream Web Platform Tests are **not included** in this repository (size); no WPT or CI runs are claimed for this fork.
 
 ### Manual smoke checklist (what was actually verified for this release)
 
@@ -522,7 +512,7 @@ Please read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before participating.
 
 This project is licensed under the **Mozilla Public License 2.0** — see [LICENSE](LICENSE).
 
-Neo is a **derivative work of the Servo Project** (https://servo.org/), also MPL-2.0. All original Servo source files retain their MPL headers; modifications made for Neo are distributed under the same license. Portions of this repository (WPT test material, `third_party/`) carry their own upstream licenses as marked in those files.
+Neo is a **derivative work of the Servo Project** (https://servo.org/), also MPL-2.0. All original Servo source files retain their MPL headers; modifications made for Neo are distributed under the same license. Portions of this repository (e.g. `third_party/`) carry their own upstream licenses as marked in those files.
 
 ---
 

@@ -85,5 +85,5 @@ devcontainer-lock.json
 /neo.exe
 /neo.pdb
 *.log
-# test suite kept locally but not published to GitHub (size)
+# upstream test suite (WPT) deliberately excluded from this repository
 /tests/

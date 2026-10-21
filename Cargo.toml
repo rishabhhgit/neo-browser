@@ -6,8 +6,6 @@ members = [
     "components/xpath",
     "ffi/capi",
     "ports/servoshell",
-    "tests/capi",
-    "tests/unit/*",
 ]
 default-members = ["ports/servoshell"]
 exclude = [".cargo", "support/crown"]
