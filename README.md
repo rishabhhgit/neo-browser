@@ -20,7 +20,7 @@ Neo is a desktop web browser whose engine is **neither Chromium, WebKit, nor Gec
 
 **Neo exists because browser diversity matters.** Every mainstream browser today traces back to one of three engines. Neo explores what a small, readable, fully open-source browser looks like when the whole stack — DOM, CSS, layout, networking, compositing, media, and UI — is written in Rust and easy to hack on.
 
-> **Status:** Neo is real, buildable, and runnable software — not a mockup. It loads real websites, plays adaptive video streams, and ships working tabs, bookmarks, history, and preferences. It is also honest about its limits: some web platform features that mainstream browsers ship (see [Limitations](#-limitations-and-honest-status)) are not implemented yet.
+> **Status:** Neo is real, buildable, and runnable software — not a mockup. It loads real websites, plays adaptive video streams, and ships working tabs, bookmarks, history, and preferences. It is also honest about its limits: some web platform features that mainstream browsers ship (see [Limitations](#-limitations)) are not implemented yet.
 
 **Who it is for:** developers who want a readable browser codebase to learn from or build on, and enthusiasts who want to try a non-Chromium browser with a clean UI.
 
@@ -30,8 +30,8 @@ Neo is a desktop web browser whose engine is **neither Chromium, WebKit, nor Gec
 
 ## Table of contents
 
-- [Feature overview](#-feature-overview)
-- [Limitations and honest status](#-limitations-and-honest-status)
+- [Feature overview](#feature-overview)
+- [Limitations](#-limitations)
 - [Screenshots](#-screenshots)
 - [Technology stack](#-technology-stack)
 - [Installation and setup](#-installation-and-setup)
@@ -46,65 +46,65 @@ Neo is a desktop web browser whose engine is **neither Chromium, WebKit, nor Gec
 - [License](#-license)
 - [Acknowledgments](#-acknowledgments)
 
-**Status legend used below:** ✅ implemented and verified · 🧪 experimental · 🚧 not implemented (planned or out of scope for now)
+**Status legend used below:** 🧪 experimental · 🚧 not implemented (planned or out of scope for now). Anything with no marker is implemented and was verified during development of this release.
 
 ---
 
-## ✅ Feature overview
+## Feature overview
 
 ### Tabs and navigation
 
 | Feature | What it does |
 | --- | --- |
-| Tab strip ✅ | Open tabs are listed in a strip with page titles, favicons, a loading indicator, and a per-tab close button. |
-| Keyboard tab control ✅ | `Ctrl+T` new tab, `Ctrl+W` close tab, `Ctrl+1…8` jump to tab, `Ctrl+9` last tab, `Ctrl+PageUp/PageDown` cycle tabs. |
-| Address bar ✅ | Accepts full URLs, bare domains (`example.com` → `https://example.com`), local file paths, or falls back to a web search using the configured search engine. Covered by unit tests in `ports/servoshell/test.rs`. |
-| Back / forward / reload ✅ | Toolbar buttons plus `Alt+←` / `Alt+→`, mouse back/forward buttons, `Ctrl+R` and `F5`. |
-| Reload all tabs ✅ | Toolbar "reload all" command re-loads every open tab. |
-| Smart startup URL ✅ | Launching `neo.exe <url-or-query>` opens that argument; with no argument it opens the configured homepage (default: `https://www.google.com`). |
-| New tab page ✅ | Neo-branded new tab (`neo:newtab`) with the Neo logo, a Google search box, and a Home link. Opened by the toolbar/tabs new-tab button and `Ctrl+T`. |
+| Tab strip | Open tabs are listed in a strip with page titles, favicons, a loading indicator, and a per-tab close button. |
+| Keyboard tab control | `Ctrl+T` new tab, `Ctrl+W` close tab, `Ctrl+1…8` jump to tab, `Ctrl+9` last tab, `Ctrl+PageUp/PageDown` cycle tabs. |
+| Address bar | Accepts full URLs, bare domains (`example.com` → `https://example.com`), local file paths, or falls back to a web search using the configured search engine. Covered by unit tests in `ports/servoshell/test.rs`. |
+| Back / forward / reload | Toolbar buttons plus `Alt+←` / `Alt+→`, mouse back/forward buttons, `Ctrl+R` and `F5`. |
+| Reload all tabs | Toolbar "reload all" command re-loads every open tab. |
+| Smart startup URL | Launching `neo.exe <url-or-query>` opens that argument; with no argument it opens the configured homepage (default: `https://www.google.com`). |
+| New tab page | Neo-branded new tab (`neo:newtab`) with the Neo logo, a Google search box, and a Home link. Opened by the toolbar/tabs new-tab button and `Ctrl+T`. |
 
 ### Bookmarks and history
 
 | Feature | What it does |
 | --- | --- |
-| Bookmark toggle ✅ | Star button in the toolbar bookmarks/un-bookmarks the current page. |
-| Bookmarks side panel ✅ | Toggle panel listing saved bookmarks; clicking one navigates. |
-| Persistent bookmarks ✅ | Stored as JSON in Neo's config directory (`bookmarks.json`). |
-| Browsing history ✅ | Visits are recorded automatically (URL + title + time). |
-| History side panel ✅ | Toggle panel with a **live text filter** over your history; click an entry to visit it. |
-| Persistent history ✅ | Stored as JSON in Neo's config directory (`history.json`). |
+| Bookmark toggle | Star button in the toolbar bookmarks/un-bookmarks the current page. |
+| Bookmarks side panel | Toggle panel listing saved bookmarks; clicking one navigates. |
+| Persistent bookmarks | Stored as JSON in Neo's config directory (`bookmarks.json`). |
+| Browsing history | Visits are recorded automatically (URL + title + time). |
+| History side panel | Toggle panel with a **live text filter** over your history; click an entry to visit it. |
+| Persistent history | Stored as JSON in Neo's config directory (`history.json`). |
 
 ### Settings and preferences
 
 | Feature | What it does |
 | --- | --- |
-| Preferences page ✅ | `neo:preferences` — toggles for experimental web-platform features, an HTTP-cache switch, and a **user-agent selector** (Neo / Firefox / Chrome presets plus a free-form custom value). |
-| Preferences toggle ✅ | Toolbar `?` button instantly enables/disables the experimental preference set. |
-| Raw config view ✅ | `neo:config` renders the active preference JSON. |
-| Homepage + search engine ✅ | Preferences `homepage` and `searchpage` (with the `%s` query placeholder). Defaults: Google for both. |
-| Configurable via CLI ✅ | Preferences can be overridden on the command line (`--prefs-file`, and documented `shell.*` preference keys) — see `--help`. |
-| Command-line switches ✅ | Layout thread count (`-y`), headless mode (`-z`), devtools (`--devtools`), experimental features (`--enable-experimental-web-platform-features`), certificate-error override, hosts-file override, device-pixel-ratio override, and more. |
+| Preferences page | `neo:preferences` — toggles for experimental web-platform features, an HTTP-cache switch, and a **user-agent selector** (Neo / Firefox / Chrome presets plus a free-form custom value). |
+| Preferences toggle | Toolbar `?` button instantly enables/disables the experimental preference set. |
+| Raw config view | `neo:config` renders the active preference JSON. |
+| Homepage + search engine | Preferences `homepage` and `searchpage` (with the `%s` query placeholder). Defaults: Google for both. |
+| Configurable via CLI | Preferences can be overridden on the command line (`--prefs-file`, and documented `shell.*` preference keys) — see `--help`. |
+| Command-line switches | Layout thread count (`-y`), headless mode (`-z`), devtools (`--devtools`), experimental features (`--enable-experimental-web-platform-features`), certificate-error override, hosts-file override, device-pixel-ratio override, and more. |
 
 ### Media and graphics
 
 | Feature | What it does |
 | --- | --- |
-| HTML5 `<video>` / `<audio>` ✅ | Media playback through a GStreamer backend integrated into the engine. |
-| Direct files ✅ | Progressive files such as MP4 play via `<video src="…mp4">`. |
-| HLS adaptive streaming ✅ | Apple-style `.m3u8` master playlists play through `<video>` — **without needing Media Source Extensions**. Verified with Apple's 1080p `img_bipbop` test stream. |
-| DASH adaptive streaming ✅ | `.mpd` manifests play through `<video>` (verified with the Akamai `bbb_30fps` test stream). |
-| Multiple simultaneous streams ✅ | Verified: three concurrent `<video>` elements (HLS + DASH + MP4) all reach `readyState = 4` and advance playback time. |
-| GPU compositing ✅ | WebRender compositing over OpenGL/ANGLE (observed running on Direct3D 11 via ANGLE). |
-| WebGL ✅ / WebGPU 🧪 / WebXR 🧪 | Enabled by default in the feature set; maturity varies by site — these are the engine's experimental web features. |
+| HTML5 `<video>` / `<audio>` | Media playback through a GStreamer backend integrated into the engine. |
+| Direct files | Progressive files such as MP4 play via `<video src="…mp4">`. |
+| HLS adaptive streaming | Apple-style `.m3u8` master playlists play through `<video>` — **without needing Media Source Extensions**. Verified with Apple's 1080p `img_bipbop` test stream. |
+| DASH adaptive streaming | `.mpd` manifests play through `<video>` (verified with the Akamai `bbb_30fps` test stream). |
+| Multiple simultaneous streams | Verified: three concurrent `<video>` elements (HLS + DASH + MP4) all reach `readyState = 4` and advance playback time. |
+| GPU compositing | WebRender compositing over OpenGL/ANGLE (observed running on Direct3D 11 via ANGLE). |
+| WebGL / WebGPU 🧪 / WebXR 🧪 | Enabled by default in the feature set; maturity varies by site — these are the engine's experimental web features. |
 | Gamepad API 🧪 | Gamepad feature enabled by default (`gilrs` backend). |
-| Rendering debug overlays ✅ | `F9` WebRender frame capture, `F10` render-target debug, `F11` texture-cache debug, `F12` profiler overlay. |
+| Rendering debug overlays | `F9` WebRender frame capture, `F10` render-target debug, `F11` texture-cache debug, `F12` profiler overlay. |
 
 ### Developer tooling and automation
 
 | Feature | What it does |
 | --- | --- |
-| W3C WebDriver ✅ | `--webdriver <port>` starts a WebDriver server (session creation, navigation, JS execution, window handles, screenshots). Any W3C client (Selenium, `chromedriver`-style tools, plain HTTP) can drive Neo. Used extensively during development of this fork. |
+| W3C WebDriver | `--webdriver <port>` starts a WebDriver server (session creation, navigation, JS execution, window handles, screenshots). Any W3C client (Selenium, `chromedriver`-style tools, plain HTTP) can drive Neo. Used extensively during development of this fork. |
 | Remote DevTools 🧪 | `--devtools <address:port>` (e.g. `127.0.0.1:7000`) starts Servo's remote devtools server. Feature is compiled in by default; not smoke-tested in the current build. |
 | Headless mode 🚧 | `-z` / `--headless` flag exists in the CLI (inherited from Servo). |
 | Logging 🧪 | Standard `env_logger` filtering, e.g. `RUST_LOG=info` (verified) or module filters such as `RUST_LOG=net=debug`. |
@@ -113,44 +113,85 @@ Neo is a desktop web browser whose engine is **neither Chromium, WebKit, nor Gec
 
 | Feature | What it does |
 | --- | --- |
-| Custom chrome ✅ | Toolbar, tab strip, side panels, and dialogs are rendered with `egui` inside the shell — distinct from the page content, which Servo renders. |
-| Site dialogs ✅ | Alert/confirm/prompt boxes, file pickers, HTTP authentication dialogs, permission requests, select-element popups, color pickers, and right-click context menus are all implemented in the shell UI. |
-| `neo:` internal pages ✅ | `neo:newtab`, `neo:preferences`, `neo:config`, `neo:experimental-preferences`, `neo:default-user-agent` — served by a built-in protocol handler. |
-| Branding ✅ | `neo.exe`, Neo window titles, Neo application identity on Windows, Neo icon set (`resources/neo.ico`, `resources/neo_logo.png`). |
+| Custom chrome | Toolbar, tab strip, side panels, and dialogs are rendered with `egui` inside the shell — distinct from the page content, which Servo renders. |
+| Site dialogs | Alert/confirm/prompt boxes, file pickers, HTTP authentication dialogs, permission requests, select-element popups, color pickers, and right-click context menus are all implemented in the shell UI. |
+| `neo:` internal pages | `neo:newtab`, `neo:preferences`, `neo:config`, `neo:experimental-preferences`, `neo:default-user-agent` — served by a built-in protocol handler. |
+| Branding | `neo.exe`, Neo window titles, Neo application identity on Windows, Neo icon set (`resources/neo.ico`, `resources/neo_logo.png`). |
 | Accessibility 🧪 | AccessKit integration is compiled into the shell (screen-reader tree exposure comes from the engine's accessibility support). |
-| WebDriver-compatible control of dialogs ✅ | Embedder controls are virtualized under WebDriver so automation can accept prompts. |
+| WebDriver-compatible control of dialogs | Embedder controls are virtualized under WebDriver so automation can accept prompts. |
 
 ---
 
-## 🚧 Limitations and honest status
+## 🚧 Limitations
 
-Neo is under active development. The following are **not** implemented today — documented here so the README never over-promises:
+Neo is under active development. This is the **complete, honest list** of everything Neo cannot do today, everything that is rough, and every boundary it has — collected in one place so this README never over-promises. Planned fixes are tracked in the [Roadmap](#-roadmap).
 
-- **No Media Source Extensions (MSE).** Sites whose players depend on MSE (most notably **YouTube**) will not play video. This is an engine-level gap requiring substantial work in the script/engine layer — not a configuration problem.
-- **No Encrypted Media Extensions (EME) / DRM.** Streaming services that require Widevine/FairPlay (Netflix, Spotify web player, etc.) cannot play protected content in any build of this engine.
-- **No download manager.** Navigating to a file downloads nothing to disk; the HTML `download` attribute on links is an explicit `TODO` in the code (`components/script/dom/html/textual/htmlanchorelement.rs`).
+### Web platform and media
+
+- **No YouTube playback.** YouTube's player depends on Media Source Extensions (see next bullet) and cannot work in this engine today.
+- **No Media Source Extensions (MSE).** Sites whose players feed bytes through MSE will not play video. This is an engine-level gap in the script layer requiring substantial work — not a configuration problem.
+- **JavaScript player libraries therefore fail.** `hls.js`, `dash.js`, Shaka Player, and similar MSE-driven libraries do not work — even though Neo's *native* `<video>` handling of `.m3u8`/`.mpd` URLs (no MSE involved) is fully functional.
+- **No Encrypted Media Extensions (EME) / DRM.** Netflix, Disney+, Spotify web player, and every Widevine/FairPlay-protected stream cannot play protected content in any build of this engine.
+- **No WebRTC for web pages.** The engine tree carries experimental WebRTC plumbing, but `RTCPeerConnection` is not exposed to page script — video calls, getUserMedia-based apps, and WebRTC data channels do not work.
+- **No WebExtensions.** There is no extension system: ad blockers, password managers, and other add-ons cannot be installed.
+- **Experimental web features are immature.** WebGPU 🧪, WebXR 🧪, Gamepad API 🧪, and AccessKit accessibility 🧪 are compiled in and enabled by default, but compatibility varies by site and none are production-grade.
+
+### Missing everyday browser features
+
+- **No download manager.** Navigating to a file downloads nothing to disk; the HTML `download` attribute on links is an explicit `TODO` (`components/script/dom/html/textual/htmlanchorelement.rs`).
 - **No find-in-page** (`Ctrl+F`) — no such feature exists in the shell or engine integration.
-- **No session/tab restore** across restarts. Open tabs are not saved or re-opened.
-- **No browser extensions** (no WebExtensions API).
-- **No password manager, autofill, or sync** — no form-data capture, credential store, or account synchronization of any kind.
-- **No cookie management UI.** Cookies are handled by the network stack (and resettable via WebDriver), but there is no user-facing cookie inspector.
-- **Minimize-while-playing media is under investigation.** Minimizing the window logs a `0×0` surface-resize warning from the rendering context; long-running behavior with active video in a minimized window is being tested (tracked on the roadmap).
-- **Windows is the primary verified platform.** The code retains Servo's macOS/Linux/Android support paths, but this fork has been built and tested on **Windows 11 x86_64 (MSVC)** only.
+- **No session/tab restore.** Open tabs are not saved or re-opened across restarts.
+- **No password manager, autofill, or form-data capture**, and **no account or sync system** of any kind.
+- **No cookie or site-data UI.** Cookies work in the network stack (and are resettable via WebDriver), but there is no user-facing inspector.
+- **No search-engine picker UI.** The search engine is changed through preferences or the CLI (`searchpage`), not from a menu.
+- **No tab pinning**, tab groups, or tab drag-reordering.
+- **No printing.** There is no print dialog or print path in the shell.
+- **No built-in PDF viewer.** PDF links are not rendered (no PDFium integration).
+- **No spellcheck.** No inline or dictionary spellchecking in form fields or elsewhere.
+- **No multiple-window management UI.** Popups/`target=_blank` windows are handled by the embedder, but there is no "new window" command or window manager in the chrome.
+
+### Reliability and behavior quirks
+
+- **Minimize-while-playing media is under investigation.** Minimizing the window logs a `0×0` surface-resize warning (`Unable to resize to size under 1x1` from `paint_api`); long-running behavior with active video in a minimized window is still being tested.
+- **Heavy pages can briefly spike memory** while textures queue up; normal browsing stays in the low hundreds of MB, but the renderer has no strict texture-queue backpressure yet.
+- **Headless mode (`-z`) is untested in this fork.** The flag exists (inherited from Servo) but no verification has been performed here.
+
+### Platform, testing, and project scope
+
+- **Windows is the only verified platform.** Built and tested on **Windows 11 x86_64 (MSVC)** only; Servo's macOS/Linux/Android code paths are retained but untested in this fork.
+- **Linux config directory is still upstream's** `~/.config/servo/default/` — not yet renamed to Neo.
+- **The WPT suite ships but has not been run or re-baselined** for this fork, and there is **no CI yet** — claims here rest on manual verification and the shell's unit tests only.
+- **Remote DevTools is compiled in but not smoke-tested** in the current build.
+- **Site compatibility is not systematically tested.** Verified against Google (homepage/search/new tab), Apple and Akamai HLS/DASH test streams, and general pages; no broad site-by-site status pass has been done.
+- **Builds are unsigned** — occasional Windows Defender/AV heuristics may flag fresh builds; build from source as shown above.
+
+### Security boundaries
+
+(Expanded in [Security and privacy](#-security-and-privacy) — listed here so the "everything" list is complete:)
+
+- **No Chromium-style OS sandbox** — Neo relies on Rust memory safety and engine architecture, not OS-level site isolation.
+- **The WebDriver server binds `0.0.0.0`** (all interfaces) when enabled — safe only on trusted networks.
+- **Defaults contact Google** — the default homepage and search engine are Google, so a stock launch talks to Google.
 
 ---
 
 ## 📸 Screenshots
 
-> **No screenshots are published yet** — this project does not ship fabricated or mockup imagery.
+Captured from the **actual build** running on Windows 11 — no mockups or fabricated imagery.
 
-To contribute screenshots:
+**New tab page (`neo:newtab`) — Neo logo and Google search box:**
 
-1. Run Neo (see [Installation](#-installation-and-setup)).
-2. Capture the main window (e.g. the new tab page, a bookmarked site, video playback, `neo:preferences`).
-3. Save PNGs under `docs/screenshots/` with descriptive names.
-4. Reference them here, e.g. `![Neo new tab](docs/screenshots/new-tab.png)`.
+![Neo new tab page](docs/screenshots/new-tab.png)
 
-The project logo **is** available today and is embedded at the top of this README: [`resources/neo_logo.png`](resources/neo_logo.png).
+**Default homepage on first launch (Google):**
+
+![Neo Google homepage](docs/screenshots/google-homepage.png)
+
+**A real website (Wikipedia) — full rendering with favicon and live tab title:**
+
+![Wikipedia article rendered in Neo](docs/screenshots/web-page.png)
+
+The project logo is embedded at the top of this README: [`resources/neo_logo.png`](resources/neo_logo.png). To contribute more screenshots (e.g. `neo:preferences`, side panels, video playback): run Neo, capture the window, save PNGs under `docs/screenshots/`, and reference them here.
 
 ---
 
@@ -406,10 +447,10 @@ Verified behavior — with clear boundaries:
 
 **What Neo does:**
 
-- ✅ **No telemetry, analytics, or crash-reporting of its own.** No such service is referenced anywhere in the shell or network stack.
-- ✅ **Your data stays local.** History, bookmarks, and preferences are plain JSON files in the config directory above. There is no account system and no sync.
-- ✅ **TLS certificate validation is on by default.** `--ignore-certificate-errors` must be passed explicitly to disable it (never do this for normal browsing).
-- ✅ **Standard web isolation building blocks:** cookies are partitioned per the network stack's cookie storage, and HTTPS/HSTS handling is implemented (`components/net`).
+- **No telemetry, analytics, or crash-reporting of its own.** No such service is referenced anywhere in the shell or network stack.
+- **Your data stays local.** History, bookmarks, and preferences are plain JSON files in the config directory above. There is no account system and no sync.
+- **TLS certificate validation is on by default.** `--ignore-certificate-errors` must be passed explicitly to disable it (never do this for normal browsing).
+- **Standard web isolation building blocks:** cookies are partitioned per the network stack's cookie storage, and HTTPS/HSTS handling is implemented (`components/net`).
 
 **What you should know:**
 
@@ -460,8 +501,7 @@ target\release\neo.exe
 
 ### Known rough edges
 
-- Minimizing the window logs `Unable to resize to size under 1x1 (PhysicalSize { width: 0, height: 0 })` from `paint_api` — investigated, fix planned (roadmap).
-- Very heavy pages can briefly spike memory while textures queue up; normal browsing stays in the low hundreds of MB.
+The complete list — including the minimize warning, memory-spike behavior, and every other gap — lives in one place: [Limitations](#-limitations).
 
 ---
 
@@ -475,7 +515,7 @@ Planned work — **none of this is implemented yet**:
 - [ ] **Minimize/occlusion robustness** — zero-size surface handling and media behavior while minimized.
 - [ ] **Site compatibility pass** — structured testing against popular sites (Wikipedia, GitHub, Hacker News, news sites) with a public status page.
 - [ ] **CI** — build + unit-test workflow for Windows (and Linux, if capacity allows).
-- [ ] **Screenshots and release binaries** — tagged releases with prebuilt `neo.exe` on the Releases page.
+- [ ] **Release binaries** — tagged releases with prebuilt `neo.exe` on the Releases page.
 - [ ] **MSE evaluation** — scoping study for Media Source Extensions in the script layer (large effort; no commitment yet).
 - [ ] **Cookie/site-data UI** — a basic inspector for cookies and site storage.
 - [ ] **Search-engine picker** — a UI for the existing `searchpage` preference (currently pref/CLI only).
