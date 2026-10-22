@@ -41,15 +41,9 @@ target\release\neo.exe
 
    A healthy tree reports `9 passed; 0 failed` (plus an empty binary-target suite). Add or update tests when you change URL parsing, preference handling, or other tested behavior (`ports/servoshell/test.rs`).
 
-3. **Tidy checks** (optional but appreciated) — the upstream Servo tidy tooling is configured via [`servo-tidy.toml`](servo-tidy.toml):
+3. **Keep the diff focused.** One logical change per PR. Do not mix unrelated reformatting with behavior changes.
 
-   ```powershell
-   python mach test-tidy
-   ```
-
-4. **Keep the diff focused.** One logical change per PR. Do not mix unrelated reformatting with behavior changes.
-
-5. **Fill in** [PULL_REQUEST_TEMPLATE.md](PULL_REQUEST_TEMPLATE.md): describe the change, how you tested it, and link any issue it fixes.
+4. **Fill in** [PULL_REQUEST_TEMPLATE.md](PULL_REQUEST_TEMPLATE.md): describe the change, how you tested it, and link any issue it fixes.
 
 ## Where to start
 

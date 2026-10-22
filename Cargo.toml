@@ -8,7 +8,7 @@ members = [
     "ports/servoshell",
 ]
 default-members = ["ports/servoshell"]
-exclude = [".cargo", "support/crown"]
+exclude = [".cargo"]
 
 [workspace.package]
 version = "0.7.0"
